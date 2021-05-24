@@ -37,6 +37,13 @@ export default class KanbanBoard extends Component {
     }
   }
 
+  handleDelete = (task) => {
+    let index = this.state.tasks.indexOf(task);
+    this.setState({
+      tasks: this.state.tasks.filter((_, i) => i !== index)
+    });
+  }
+
   render() {
     const { tasks } = this.state;
 
@@ -74,7 +81,7 @@ export default class KanbanBoard extends Component {
                             <button className="icon-only x-small mx-2" data-testid={`${task.name.split(' ').join('-')}-forward`}>
                               <i className="material-icons">arrow_forward</i>
                             </button>
-                            <button className="icon-only danger x-small mx-2" data-testid={`${task.name.split(' ').join('-')}-delete`}>
+                            <button onClick={() => this.handleDelete(task)} className="icon-only danger x-small mx-2" data-testid={`${task.name.split(' ').join('-')}-delete`}>
                               <i className="material-icons">delete</i>
                             </button>
                           </div>
