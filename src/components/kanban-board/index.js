@@ -11,7 +11,7 @@ export default class KanbanBoard extends Component {
         { name: '1', stage: 0 },
         { name: '2', stage: 0 },
       ],
-      newTaskValue: ''
+      newTaskValue: '',
     };
     this.stagesNames = ['Backlog', 'To Do', 'Ongoing', 'Done'];
   }
@@ -44,6 +44,35 @@ export default class KanbanBoard extends Component {
     });
   }
 
+  handleGoingBack = (name) => {
+    let tasks = this.state.tasks;
+    tasks = tasks.map((task) => {
+      if (task.name === name) {
+        return { name: task.name, stage: task.stage === 0 ? 0 : task.stage - 1 };
+      }
+      else {
+        return task;
+      }
+    });
+
+    this.setState({ tasks: tasks });
+  }
+
+  handleGoingForward = (name) => {
+    let tasks = this.state.tasks;
+    tasks = tasks.map((task) => {
+      if (task.name === name) {
+        return { name: task.name, stage: task.stage === 3 ? 3 : task.stage + 1 };
+      }
+      else {
+        return task;
+      }
+    });
+
+    this.setState({ tasks: tasks });
+  }
+
+
   render() {
     const { tasks } = this.state;
 
@@ -75,10 +104,10 @@ export default class KanbanBoard extends Component {
                         <div className="li-content layout-row justify-content-between align-items-center">
                           <span data-testid={`${task.name.split(' ').join('-')}-name`}>{task.name}</span>
                           <div className="icons">
-                            <button className="icon-only x-small mx-2" data-testid={`${task.name.split(' ').join('-')}-back`}>
+                            <button onClick={() => this.handleGoingBack(task.name)} disabled={task.stage === 0 ? true : false} className="icon-only x-small mx-2" data-testid={`${task.name.split(' ').join('-')}-back`}>
                               <i className="material-icons">arrow_back</i>
                             </button>
-                            <button className="icon-only x-small mx-2" data-testid={`${task.name.split(' ').join('-')}-forward`}>
+                            <button onClick={() => this.handleGoingForward(task.name)} disabled={task.stage === 3 ? true : false} className="icon-only x-small mx-2" data-testid={`${task.name.split(' ').join('-')}-forward`}>
                               <i className="material-icons">arrow_forward</i>
                             </button>
                             <button onClick={() => this.handleDelete(task)} className="icon-only danger x-small mx-2" data-testid={`${task.name.split(' ').join('-')}-delete`}>
